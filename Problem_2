@@ -1,0 +1,112 @@
+#include <stdio.h>
+
+#define MAX 20
+
+int main() {
+    int r1, c1, r2, c2;
+    int A[MAX][MAX], B[MAX][MAX], C[MAX][MAX];
+    int i, j, k, choice;
+
+    while (1) {
+        printf("\n=== Matrix Operations Menu ===\n");
+        printf("1. Addition\n2. Subtraction\n3. Multiplication\n4. Transpose\n5. Exit\n");
+        printf("Choose operation: ");
+        scanf("%d", &choice);
+
+        if (choice == 5) {
+            printf("Exiting program...\n");
+            break;
+        }
+
+        // Input for 2 matrices when needed
+        if (choice == 1 || choice == 2 || choice == 3) {
+            printf("\nEnter rows & columns of Matrix A: ");
+            scanf("%d%d", &r1, &c1);
+
+            printf("Enter elements of Matrix A:\n");
+            for (i = 0; i < r1; i++)
+                for (j = 0; j < c1; j++)
+                    scanf("%d", &A[i][j]);
+
+            printf("\nEnter rows & columns of Matrix B: ");
+            scanf("%d%d", &r2, &c2);
+
+            printf("Enter elements of Matrix B:\n");
+            for (i = 0; i < r2; i++)
+                for (j = 0; j < c2; j++)
+                    scanf("%d", &B[i][j]);
+        }
+
+        switch (choice) {
+
+        case 1: // ADDITION
+            if (r1 != r2 || c1 != c2) {
+                printf("Addition not possible! Size mismatch.\n");
+                break;
+            }
+            printf("\nResult of Addition:\n");
+            for (i = 0; i < r1; i++) {
+                for (j = 0; j < c1; j++) {
+                    C[i][j] = A[i][j] + B[i][j];
+                    printf("%d ", C[i][j]);
+                }
+                printf("\n");
+            }
+            break;
+
+        case 2: // SUBTRACTION
+            if (r1 != r2 || c1 != c2) {
+                printf("Subtraction not possible! Size mismatch.\n");
+                break;
+            }
+            printf("\nResult of Subtraction:\n");
+            for (i = 0; i < r1; i++) {
+                for (j = 0; j < c1; j++) {
+                    C[i][j] = A[i][j] - B[i][j];
+                    printf("%d ", C[i][j]);
+                }
+                printf("\n");
+            }
+            break;
+
+        case 3: // MULTIPLICATION
+            if (c1 != r2) {
+                printf("Multiplication not possible! Column of A must equal row of B.\n");
+                break;
+            }
+            printf("\nResult of Multiplication:\n");
+            for (i = 0; i < r1; i++) {
+                for (j = 0; j < c2; j++) {
+                    C[i][j] = 0;
+                    for (k = 0; k < c1; k++)
+                        C[i][j] += A[i][k] * B[k][j];
+                    printf("%d ", C[i][j]);
+                }
+                printf("\n");
+            }
+            break;
+
+        case 4: // TRANSPOSE
+            printf("\nEnter rows & columns of Matrix: ");
+            scanf("%d%d", &r1, &c1);
+
+            printf("Enter matrix elements:\n");
+            for (i = 0; i < r1; i++)
+                for (j = 0; j < c1; j++)
+                    scanf("%d", &A[i][j]);
+
+            printf("\nTranspose of the Matrix:\n");
+            for (j = 0; j < c1; j++) {
+                for (i = 0; i < r1; i++)
+                    printf("%d ", A[i][j]);
+                printf("\n");
+            }
+            break;
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
