@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left, *right;
+};
+
+// ---- CREATE NEW NODE ----
+struct node* createNode(int x) {
+    struct node *t = malloc(sizeof(struct node));
+    t->data = x;
+    t->left = t->right = NULL;
+    return t;
+}
+
+// ---- INSERT INTO BST ----
+struct node* insert(struct node *root, int x) {
+    if (root == NULL)
+        return createNode(x);
+
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else
+        root->right = insert(root->right, x);
+
+    return root;
+}
+
+// ---- FIND MIN VALUE NODE ----
+struct node* findMin(struct node *root) {
+    while (root->left != NULL)
+        root = root->left;
+    return root;
+}
+
+// ---- DELETE NODE FROM BST ----
+struct node* delete(struct node *root, int x) {
+    if (root == NULL)
+        return root;
+
+    if (x < root->data)
+        root->left = delete(root->left, x);
+    else if (x > root->data)
+        root->right = delete(root->right, x);
+    else {
+        // case 1 & 2: one/no child
+        if (root->left == NULL) {
+            struct node *t = root->right;
+            free(root);
+            return t;
+        }
+        else if (root->right == NULL) {
+            struct node *t = root->left;
+            free(root);
+            return t;
+        }
+
+        // case 3: two children
+        struct node *minRight = findMin(root->right);
+        root->data = minRight->data;
+        root->right = delete(root->right, minRight->data);
+    }
+    return root;
+}
+
+// ---- INORDER DISPLAY ----
+void inorder(struct node *root) {
+    if (root) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+// ---- MAIN ----
+int main() {
+    struct node *root = NULL;
+    int ch, val;
+
+    do {
+        printf("\n1.Insert  2.Delete  3.Inorder Display  4.Exit : ");
+        scanf("%d", &ch);
+
+        if (ch == 1) {
+            printf("Enter value: ");
+            scanf("%d", &val);
+            root = insert(root, val);
+        }
+        else if (ch == 2) {
+            printf("Enter value to delete: ");
+            scanf("%d", &val);
+            root = delete(root, val);
+        }
+        else if (ch == 3) {
+            inorder(root);
+            printf("\n");
+        }
+
+    } while (ch != 4);
+
+    return 0;
+}
