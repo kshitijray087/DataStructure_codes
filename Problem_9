@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *last = NULL;   
+
+// ---------- INSERT AT END ----------
+void insert(int x) {
+    struct node *newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = x;
+
+    if (last == NULL) {         // first node
+        last = newNode;
+        newNode->next = newNode;
+    }
+    else {
+        newNode->next = last->next;
+        last->next = newNode;
+        last = newNode;
+    }
+}
+
+// ---------- DELETE BY VALUE ----------
+void del(int x) {
+    if (last == NULL) {
+        printf("List empty\n");
+        return;
+    }
+
+    struct node *curr = last->next;  // first node
+    struct node *prev = last;
+
+    // searching
+    do {
+        if (curr->data == x)
+            break;
+        prev = curr;
+        curr = curr->next;
+    } while (curr != last->next);
+
+    if (curr->data != x) {
+        printf("Not found\n");
+        return;
+    }
+
+    // only one node
+    if (curr == last && curr->next == last) {
+        last = NULL;
+    }
+    else {
+        prev->next = curr->next;
+        if (curr == last)
+            last = prev;
+    }
+
+    free(curr);
+    printf("Deleted %d\n", x);
+}
+
+// ---------- DISPLAY ----------
+void display() {
+    if (last == NULL) {
+        printf("List empty\n");
+        return;
+    }
+
+    struct node *temp = last->next;  // first node
+
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != last->next);
+
+    printf("\n");
+}
+
+// ---------- MAIN ----------
+int main() {
+    int ch, val;
+
+    do {
+        printf("\n1.Insert 2.Delete 3.Display 4.Exit : ");
+        scanf("%d", &ch);
+
+        if (ch == 1) {
+            printf("Enter value: ");
+            scanf("%d", &val);
+            insert(val);
+        }
+        else if (ch == 2) {
+            printf("Enter value to delete: ");
+            scanf("%d", &val);
+            del(val);
+        }
+        else if (ch == 3) {
+            display();
+        }
+
+    } while (ch != 4);
+
+    return 0;
+}
