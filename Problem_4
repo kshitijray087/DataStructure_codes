@@ -1,0 +1,91 @@
+#include <stdio.h>
+
+#define MAX 100
+
+// ----------------- LINEAR SEARCH -----------------
+int linearSearch(int arr[], int n, int key) {
+    for (int i = 0; i < n; i++)
+        if (arr[i] == key)
+            return i;  // position
+    return -1;
+}
+
+// ----------------- BINARY SEARCH -----------------
+int binarySearch(int arr[], int left, int right, int key) {
+    while (left <= right) {
+        int mid = (left + right) / 2;
+
+        if (arr[mid] == key)
+            return mid;
+
+        if (key < arr[mid])
+            right = mid - 1;
+        else
+            left = mid + 1;
+    }
+    return -1;
+}
+
+// ----------------- MAIN PROGRAM ------------------
+int main() {
+    int arr[MAX], n, choice, item, pos;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter elements (sorted for Binary Search):\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    while (1) {
+        printf("\n===== SEARCH MENU =====\n");
+        printf("1. Linear Search\n");
+        printf("2. Binary Search\n");
+        printf("3. Time Complexity Comparison\n");
+        printf("4. Exit\n");
+        printf("Select option: ");
+        scanf("%d", &choice);
+
+        if (choice == 4) {
+            printf("Exiting program...\n");
+            break;
+        }
+
+        if (choice == 1 || choice == 2) {
+            printf("Enter element to search: ");
+            scanf("%d", &item);
+        }
+
+        switch (choice) {
+
+        case 1:
+            pos = linearSearch(arr, n, item);
+            if (pos != -1)
+                printf("Linear Search: Element found at position %d\n", pos + 1);
+            else
+                printf("Linear Search: Element NOT found.\n");
+            break;
+
+        case 2:
+            pos = binarySearch(arr, 0, n - 1, item);
+            if (pos != -1)
+                printf("Binary Search: Element found at position %d\n", pos + 1);
+            else
+                printf("Binary Search: Element NOT found.\n");
+            break;
+
+        case 3:
+            printf("\n====== TIME COMPLEXITY TABLE ======\n");
+            printf("Algorithm         Best      Average      Worst\n");
+            printf("---------------------------------------------\n");
+            printf("Linear Search  :  O(1)      O(n)         O(n)\n");
+            printf("Binary Search  :  O(1)    O(log n)    O(log n)\n");
+            printf("---------------------------------------------\n");
+            break;
+
+        default:
+            printf("Invalid option. Try again.\n");
+        }
+    }
+    return 0;
+}
