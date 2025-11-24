@@ -1,54 +1,95 @@
 #include <stdio.h>
-
 #define MAX 50
-int cq[MAX], front = -1, rear = -1;
 
+// ---------- STACK ----------
+int st[MAX], top = -1;
+void push(int x){ if(top==MAX-1) printf("Overflow\n"); else st[++top]=x; }
+void pop(){ if(top==-1) printf("Underflow\n"); else printf("Popped: %d\n", st[top--]); }
+void showStack(){ 
+    if(top==-1) printf("Empty\n"); 
+    else{ for(int i=top;i>=0;i--) printf("%d ",st[i]); printf("\n"); }
+}
+
+// ---------- QUEUE ----------
+int q[MAX], front=0, rear=-1;
+void enqueue(int x){ if(rear==MAX-1) printf("Overflow\n"); else q[++rear]=x; }
+void dequeue(){ if(front>rear) printf("Underflow\n"); else printf("Deleted: %d\n", q[front++]); }
+void showQueue(){ 
+    if(front>rear) printf("Empty\n");
+    else{ for(int i=front;i<=rear;i++) printf("%d ",q[i]); printf("\n"); }
+}
+
+// ---------- CIRCULAR QUEUE ----------
+int cq[MAX], cfront=-1, crear=-1;
 void cEnq(int x){
-    if((front==0 && rear==MAX-1) || (rear+1)%MAX==front)
+    if((cfront==0 && crear==MAX-1) || ((crear+1)%MAX)==cfront)
         printf("Overflow\n");
     else{
-        if(front==-1) front = rear = 0;
-        else rear = (rear+1)%MAX;
-        cq[rear] = x;
+        if(cfront==-1) cfront=crear=0;
+        else crear=(crear+1)%MAX;
+        cq[crear]=x;
     }
 }
-
 void cDeq(){
-    if(front==-1) printf("Underflow\n");
+    if(cfront==-1) printf("Underflow\n");
     else{
-        printf("Deleted: %d\n", cq[front]);
-        if(front==rear) front = rear = -1;
-        else front = (front+1)%MAX;
+        printf("Deleted: %d\n", cq[cfront]);
+        if(cfront==crear) cfront=crear=-1;
+        else cfront=(cfront+1)%MAX;
     }
 }
-
-void cDisp(){
-    if(front==-1) printf("Empty\n");
+void showCQueue(){
+    if(cfront==-1) printf("Empty\n");
     else{
-        int i = front;
+        int i=cfront;
         while(1){
             printf("%d ", cq[i]);
-            if(i==rear) break;
-            i = (i+1)%MAX;
+            if(i==crear) break;
+            i=(i+1)%MAX;
         }
         printf("\n");
     }
 }
 
+// ---------- MAIN ----------
 int main(){
-    int ch, val;
-    do{
-        printf("\n1.Enq 2.Deq 3.Display 4.Exit: ");
-        scanf("%d",&ch);
+    int mainChoice, ch, val;
 
-        if(ch==1){
-            printf("Enter value: ");
-            scanf("%d",&val);
-            cEnq(val);
+    while(1){
+        printf("\n=== MAIN MENU ===\n1.Stack\n2.Queue\n3.Circular Queue\n4.Exit\nChoose: ");
+        scanf("%d",&mainChoice);
+
+        if(mainChoice==4) break;
+
+        while(1){
+            if(mainChoice==1){
+                printf("\n--STACK--\n1.Push 2.Pop 3.Display 4.Back: ");
+                scanf("%d",&ch);
+                if(ch==4) break;
+                if(ch==1){ printf("Value: "); scanf("%d",&val); push(val); }
+                else if(ch==2) pop();
+                else if(ch==3) showStack();
+            }
+
+            else if(mainChoice==2){
+                printf("\n--QUEUE--\n1.Enq 2.Deq 3.Display 4.Back: ");
+                scanf("%d",&ch);
+                if(ch==4) break;
+                if(ch==1){ printf("Value: "); scanf("%d",&val); enqueue(val); }
+                else if(ch==2) dequeue();
+                else if(ch==3) showQueue();
+            }
+
+            else if(mainChoice==3){
+                printf("\n--CIRCULAR QUEUE--\n1.Enq 2.Deq 3.Display 4.Back: ");
+                scanf("%d",&ch);
+                if(ch==4) break;
+                if(ch==1){ printf("Value: "); scanf("%d",&val); cEnq(val); }
+                else if(ch==2) cDeq();
+                else if(ch==3) showCQueue();
+            }
         }
-        else if(ch==2) cDeq();
-        else if(ch==3) cDisp();
-
-    }while(ch!=4);
+    }
+    
     return 0;
 }
