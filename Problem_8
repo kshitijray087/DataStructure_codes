@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+// ---------- INSERT AT END ----------
+void insert(int x) {
+    struct node *newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = x;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+    } 
+    else {
+        struct node *temp = head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+}
+
+// ---------- DELETE BY VALUE ----------
+void del(int x) {
+    if (head == NULL) {
+        printf("List empty\n");
+        return;
+    }
+
+    struct node *temp = head, *prev = NULL;
+
+    if (temp->data == x) {
+        head = temp->next;
+        free(temp);
+        printf("Deleted %d\n", x);
+        return;
+    }
+
+    while (temp != NULL && temp->data != x) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Not found\n");
+    } 
+    else {
+        prev->next = temp->next;
+        free(temp);
+        printf("Deleted %d\n", x);
+    }
+}
+
+// ---------- DISPLAY ----------
+void display() {
+    if (head == NULL) {
+        printf("List empty\n");
+        return;
+    }
+
+    struct node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// ---------- MAIN ----------
+int main() {
+    int ch, val;
+
+    do {
+        printf("\n1.Insert  2.Delete  3.Display  4.Exit : ");
+        scanf("%d", &ch);
+
+        if (ch == 1) {
+            printf("Enter value: ");
+            scanf("%d", &val);
+            insert(val);
+        }
+        else if (ch == 2) {
+            printf("Enter value to delete: ");
+            scanf("%d", &val);
+            del(val);
+        }
+        else if (ch == 3) {
+            display();
+        }
+
+    } while (ch != 4);
+
+    return 0;
+}
