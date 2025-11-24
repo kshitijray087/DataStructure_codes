@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left, *right;
+};
+
+// ---- CREATE NEW NODE ----
+struct node* create(int x) {
+    struct node *n = malloc(sizeof(struct node));
+    n->data = x;
+    n->left = n->right = NULL;
+    return n;
+}
+
+// ---- INSERT (Simple BST Insert) ----
+struct node* insert(struct node *root, int x) {
+    if (root == NULL)
+        return create(x);
+
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else
+        root->right = insert(root->right, x);
+
+    return root;
+}
+
+// ---- TRAVERSALS ----
+void inorder(struct node *r) {
+    if (r) {
+        inorder(r->left);
+        printf("%d ", r->data);
+        inorder(r->right);
+    }
+}
+
+void preorder(struct node *r) {
+    if (r) {
+        printf("%d ", r->data);
+        preorder(r->left);
+        preorder(r->right);
+    }
+}
+
+void postorder(struct node *r) {
+    if (r) {
+        postorder(r->left);
+        postorder(r->right);
+        printf("%d ", r->data);
+    }
+}
+
+// ---- MAIN ----
+int main() {
+    struct node *root = NULL;
+    int n, x;
+
+    printf("How many nodes? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &x);
+        root = insert(root, x);
+    }
+
+    printf("\nInorder   : ");
+    inorder(root);
+
+    printf("\nPreorder  : ");
+    preorder(root);
+
+    printf("\nPostorder : ");
+    postorder(root);
+
+    printf("\n");
+
+    return 0;
+}
