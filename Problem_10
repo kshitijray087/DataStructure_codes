@@ -1,0 +1,160 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+// ======== STACK (Linked List) ========
+struct node *top = NULL;
+
+void sPush(int x) {
+    struct node *p = (struct node*)malloc(sizeof(struct node));
+    p->data = x;
+    p->next = top;
+    top = p;
+}
+
+void sPop() {
+    if (!top) printf("Stack Empty\n");
+    else {
+        printf("Popped: %d\n", top->data);
+        struct node *t = top;
+        top = top->next;
+        free(t);
+    }
+}
+
+void sDisplay() {
+    if (!top) { printf("Empty\n"); return; }
+    struct node *t = top;
+    while (t) { printf("%d ", t->data); t = t->next; }
+    printf("\n");
+}
+
+
+// ======== QUEUE (Linked List) ========
+struct node *front = NULL, *rear = NULL;
+
+void qEnq(int x) {
+    struct node *p = (struct node*)malloc(sizeof(struct node));
+    p->data = x; p->next = NULL;
+    if (!rear) front = rear = p;
+    else { rear->next = p; rear = p; }
+}
+
+void qDeq() {
+    if (!front) printf("Queue Empty\n");
+    else {
+        printf("Deleted: %d\n", front->data);
+        struct node *t = front;
+        front = front->next;
+        if (!front) rear = NULL;
+        free(t);
+    }
+}
+
+void qDisplay() {
+    if (!front) { printf("Empty\n"); return; }
+    struct node *t = front;
+    while (t) { printf("%d ", t->data); t = t->next; }
+    printf("\n");
+}
+
+
+// ======== CIRCULAR QUEUE (Linked List) ========
+struct node *last = NULL;
+
+void cEnq(int x) {
+    struct node *p = (struct node*)malloc(sizeof(struct node));
+    p->data = x;
+
+    if (!last) {
+        last = p;
+        p->next = p;
+    }
+    else {
+        p->next = last->next;
+        last->next = p;
+        last = p;
+    }
+}
+
+void cDeq() {
+    if (!last) { printf("CQ Empty\n"); return; }
+
+    struct node *first = last->next;
+
+    printf("Deleted: %d\n", first->data);
+
+    if (first == last)
+        last = NULL;
+    else
+        last->next = first->next;
+
+    free(first);
+}
+
+void cDisplay() {
+    if (!last) { printf("Empty\n"); return; }
+
+    struct node *t = last->next;
+    do {
+        printf("%d ", t->data);
+        t = t->next;
+    } while (t != last->next);
+
+    printf("\n");
+}
+
+
+// ======== MAIN MENU ========
+int main() {
+    int mainChoice, ch, val;
+
+    while (1) {
+        printf("\n=== MAIN MENU ===\n1.Stack\n2.Queue\n3.Circular Queue\n4.Exit\nChoose: ");
+        scanf("%d", &mainChoice);
+
+        if (mainChoice == 4) break;
+
+        while (1) {
+
+            // ----- Stack -----
+            if (mainChoice == 1) {
+                printf("\n--STACK--\n1.Push 2.Pop 3.Display 4.Back: ");
+                scanf("%d", &ch);
+
+                if (ch == 4) break;
+                if (ch == 1) { printf("Value: "); scanf("%d", &val); sPush(val); }
+                else if (ch == 2) sPop();
+                else if (ch == 3) sDisplay();
+            }
+
+            // ----- Queue -----
+            else if (mainChoice == 2) {
+                printf("\n--QUEUE--\n1.Enq 2.Deq 3.Display 4.Back: ");
+                scanf("%d", &ch);
+
+                if (ch == 4) break;
+                if (ch == 1) { printf("Value: "); scanf("%d", &val); qEnq(val); }
+                else if (ch == 2) qDeq();
+                else if (ch == 3) qDisplay();
+            }
+
+            // ----- Circular Queue -----
+            else if (mainChoice == 3) {
+                printf("\n--CIRCULAR QUEUE--\n1.Enq 2.Deq 3.Display 4.Back: ");
+                scanf("%d", &ch);
+
+                if (ch == 4) break;
+                if (ch == 1) { printf("Value: "); scanf("%d", &val); cEnq(val); }
+                else if (ch == 2) cDeq();
+                else if (ch == 3) cDisplay();
+            }
+        }
+    }
+
+    return 0;
+}
