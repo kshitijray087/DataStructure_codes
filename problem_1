@@ -1,0 +1,81 @@
+#include <stdio.h>
+
+#define MAX 50
+
+int main() {
+    int list[MAX];
+    int size = 0, choice, pos, value, i;
+
+    printf("=== Simple List Operations ===\n");
+
+    while (1) {
+        printf("\n1. Insert\n2. Delete\n3. Display\n4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+
+        case 1: // INSERTION
+            if (size == MAX) {
+                printf("List is full! Cannot insert.\n");
+                break;
+            }
+            printf("Enter value to insert: ");
+            scanf("%d", &value);
+            printf("Enter position (1 to %d): ", size + 1);
+            scanf("%d", &pos);
+
+            if (pos < 1 || pos > size + 1) {
+                printf("Invalid position!\n");
+            } else {
+                for (i = size; i >= pos; i--)
+                    list[i] = list[i - 1];
+
+                list[pos - 1] = value;
+                size++;
+                printf("Value inserted successfully.\n");
+            }
+            break;
+
+        case 2: // DELETION
+            if (size == 0) {
+                printf("List is empty! Nothing to delete.\n");
+                break;
+            }
+            printf("Enter position to delete (1 to %d): ", size);
+            scanf("%d", &pos);
+
+            if (pos < 1 || pos > size) {
+                printf("Invalid position!\n");
+            } else {
+                value = list[pos - 1];
+                for (i = pos - 1; i < size - 1; i++)
+                    list[i] = list[i + 1];
+
+                size--;
+                printf("Deleted value: %d\n", value);
+            }
+            break;
+
+        case 3: // DISPLAY
+            if (size == 0) {
+                printf("List is empty.\n");
+            } else {
+                printf("Current List: ");
+                for (i = 0; i < size; i++)
+                    printf("%d ", list[i]);
+                printf("\n");
+            }
+            break;
+
+        case 4:
+            printf("Exiting program...\n");
+            return 0;
+
+        default:
+            printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
