@@ -1,0 +1,79 @@
+#include <stdio.h>
+
+#define MAX 20
+int graph[MAX][MAX];
+int n = 0;
+
+// ---- CREATE GRAPH ----
+void createGraph() {
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter adjacency matrix (%d x %d):\n", n, n);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &graph[i][j]);
+}
+
+// ---- INSERT UNDIRECTED EDGE ----
+void insertEdge() {
+    int u, v;
+    printf("Enter edge (u v): ");
+    scanf("%d %d", &u, &v);
+
+    if (u >= n || v >= n || u < 0 || v < 0) {
+        printf("Invalid vertices\n");
+        return;
+    }
+
+    graph[u][v] = 1;
+    graph[v][u] = 1;
+    printf("Edge inserted!\n");
+}
+
+// ---- PRINT ADJACENCY MATRIX ----
+void printMatrix() {
+    printf("\nAdjacency Matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++)
+            printf("%d ", graph[i][j]);
+        printf("\n");
+    }
+}
+
+// ---- PRINT ADJACENT VERTICES ----
+void adjacentVertices() {
+    int v;
+    printf("Enter vertex: ");
+    scanf("%d", &v);
+
+    if (v < 0 || v >= n) {
+        printf("Invalid vertex\n");
+        return;
+    }
+
+    printf("Vertices adjacent to %d: ", v);
+    for (int i = 0; i < n; i++)
+        if (graph[v][i] == 1)
+            printf("%d ", i);
+    printf("\n");
+}
+
+// ---- MAIN ----
+int main() {
+    int ch;
+
+    while (1) {
+        printf("\n1.Create Graph\n2.Insert Edge\n3.Print Matrix\n4.Adjacent Vertices\n5.Exit\nChoose: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1: createGraph(); break;
+            case 2: insertEdge(); break;
+            case 3: printMatrix(); break;
+            case 4: adjacentVertices(); break;
+            case 5: return 0;
+            default: printf("Invalid option\n");
+        }
+    }
+}
