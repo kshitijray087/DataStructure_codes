@@ -1,0 +1,203 @@
+#include <stdio.h>
+
+#define MAX 100
+
+// ---------------------- BUBBLE SORT ------------------------
+void bubbleSort(int a[], int n) {
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (a[j] > a[j + 1]) {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// ---------------------- INSERTION SORT ------------------------
+void insertionSort(int a[], int n) {
+    int i, key, j;
+    for (i = 1; i < n; i++) {
+        key = a[i];
+        j = i - 1;
+        while (j >= 0 && a[j] > key) {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}
+
+// ---------------------- QUICK SORT ------------------------
+int partition(int a[], int low, int high) {
+    int pivot = a[high];
+    int i = low - 1, temp;
+
+    for (int j = low; j < high; j++) {
+        if (a[j] < pivot) {
+            i++;
+            temp = a[i]; a[i] = a[j]; a[j] = temp;
+        }
+    }
+
+    temp = a[i + 1]; a[i + 1] = a[high]; a[high] = temp;
+    return i + 1;
+}
+
+void quickSort(int a[], int low, int high) {
+    if (low < high) {
+        int pos = partition(a, low, high);
+        quickSort(a, low, pos - 1);
+        quickSort(a, pos + 1, high);
+    }
+}
+
+// ---------------------- MERGE SORT ------------------------
+void merge(int a[], int left, int mid, int right) {
+    int n1 = mid - left + 1, n2 = right - mid;
+    int L[MAX], R[MAX], i, j, k;
+
+    for (i = 0; i < n1; i++)
+        L[i] = a[left + i];
+
+    for (j = 0; j < n2; j++)
+        R[j] = a[mid + 1 + j];
+
+    i = 0; j = 0; k = left;
+
+    while (i < n1 && j < n2)
+        a[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+
+    while (i < n1)
+        a[k++] = L[i++];
+    while (j < n2)
+        a[k++] = R[j++];
+}
+
+void mergeSort(int a[], int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        mergeSort(a, left, mid);
+        mergeSort(a, mid + 1, right);
+        merge(a, left, mid, right);
+    }
+}
+
+// ---------------------- HEAP SORT ------------------------
+void heapify(int a[], int n, int i) {
+    int largest = i, left = 2 * i + 1, right = 2 * i + 2, temp;
+
+    if (left < n && a[left] > a[largest])
+        largest = left;
+
+    if (right < n && a[right] > a[largest])
+        largest = right;
+
+    if (largest != i) {
+        temp = a[i]; a[i] = a[largest]; a[largest] = temp;
+        heapify(a, n, largest);
+    }
+}
+
+void heapSort(int a[], int n) {
+    int temp;
+
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(a, n, i);
+
+    for (int i = n - 1; i > 0; i--) {
+        temp = a[0]; a[0] = a[i]; a[i] = temp;
+        heapify(a, i, 0);
+    }
+}
+
+// ---------------------- PRINT ARRAY ------------------------
+void printArray(int a[], int n) {
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+}
+
+// ---------------------- MAIN PROGRAM ------------------------
+int main() {
+    int arr[MAX], n, choice, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter elements:\n");
+    for (i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    while (1) {
+        printf("\n==== Sorting Menu ====\n");
+        printf("1. Bubble Sort\n");
+        printf("2. Insertion Sort\n");
+        printf("3. Quick Sort\n");
+        printf("4. Merge Sort\n");
+        printf("5. Heap Sort\n");
+        printf("6. Show Time Complexity Comparison\n");
+        printf("7. Exit\n");
+        printf("Choose option: ");
+        scanf("%d", &choice);
+
+        int temp[MAX];
+        for (i = 0; i < n; i++)
+            temp[i] = arr[i];
+
+        switch (choice) {
+            case 1:
+                bubbleSort(temp, n);
+                printf("Sorted (Bubble Sort): ");
+                printArray(temp, n);
+                break;
+
+            case 2:
+                insertionSort(temp, n);
+                printf("Sorted (Insertion Sort): ");
+                printArray(temp, n);
+                break;
+
+            case 3:
+                quickSort(temp, 0, n - 1);
+                printf("Sorted (Quick Sort): ");
+                printArray(temp, n);
+                break;
+
+            case 4:
+                mergeSort(temp, 0, n - 1);
+                printf("Sorted (Merge Sort): ");
+                printArray(temp, n);
+                break;
+
+            case 5:
+                heapSort(temp, n);
+                printf("Sorted (Heap Sort): ");
+                printArray(temp, n);
+                break;
+
+            case 6:
+                printf("\n===== Time Complexity Comparison =====\n");
+                printf("Algorithm          Best        Average       Worst\n");
+                printf("--------------------------------------------------\n");
+                printf("Bubble Sort     :  O(n)        O(n^2)        O(n^2)\n");
+                printf("Insertion Sort  :  O(n)        O(n^2)        O(n^2)\n");
+                printf("Quick Sort      :  O(n log n)  O(n log n)    O(n^2)\n");
+                printf("Merge Sort      :  O(n log n)  O(n log n)    O(n log n)\n");
+                printf("Heap Sort       :  O(n log n)  O(n log n)    O(n log n)\n");
+                printf("--------------------------------------------------\n");
+                break;
+
+            case 7:
+                printf("Exiting program...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
